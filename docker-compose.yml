@@ -11,7 +11,7 @@ services:
     cap_add:
       - NET_ADMIN
     environment:
-      - VPN_SERVICE_PROVIDER=${VPN_SERVICE_PROVIDER:-nordvpn} # Valid values: nordvpn, expressvpn, protonvpn, surfshark or custom
+      - VPN_SERVICE_PROVIDER=${VPN_SERVICE_PROVIDER:-protonvpn} # Valid values: nordvpn, expressvpn, protonvpn, surfshark or custom
       - OPENVPN_USER=${OPENVPN_USER:-""}
       - OPENVPN_PASSWORD=${OPENVPN_PASSWORD:-""}
 
@@ -22,10 +22,10 @@ services:
       # - FREE_ONLY=on  # Valid with protonvpn only. Value willbe set "on" if using free subscription provided by protonvpn
 
       ## Enable below if VPN_SERVICE_PROVIDER=custom
-      # - VPN_TYPE=openvpn # or wireguard. 
+       - VPN_TYPE=openvpn # or wireguard. 
 
       ## If VPN_TYPE is openvpn
-      # - OPENVPN_CUSTOM_CONFIG=/gluetun/custom.conf
+       - OPENVPN_CUSTOM_CONFIG=/gluetun/custom.conf
 
       ## If VPN_TYPE is wireguard. Replace below env variables as required.
       # - VPN_ENDPOINT_IP=1.2.3.4                                               # Replace with your wg endpoint ip or domain
@@ -43,13 +43,13 @@ services:
       - mynetwork
     
     # Uncomment/enable below ports if VPN is used/enabled
-    # ports:
-    #   # qbittorrent ports
-    #   - 5080:5080
-    #   - 6881:6881
-    #   - 6881:6881/udp
-    #   # prowlarr ports
-    #   - 9696:9696
+     ports:
+        qbittorrent ports
+         - 5080:5080
+         - 6881:6881
+         - 6881:6881/udp
+        prowlarr ports
+         - 9696:9696
     restart: "unless-stopped"
 
   ## Default credentials of qBittorrent - Username: admin password: adminadmin ##
@@ -58,16 +58,16 @@ services:
     container_name: qbittorrent
     image: lscr.io/linuxserver/qbittorrent:4.6.4
 
-    # Unomment below if vpn is enabled
-    # depends_on:               # Uncomment this line if vpn is enabled
-    #   - vpn                   # Uncomment this line if vpn is enabled
+     Unomment below if vpn is enabled
+     depends_on:               # Uncomment this line if vpn is enabled
+       - vpn                   # Uncomment this line if vpn is enabled
 
     # Comment below lines if VPN is enabled
     networks:               # Comment this line if vpn is enabled
       - mynetwork           # Comment this line if vpn is enabled
 
     # Unomment below line if vpn is enabled
-    # network_mode: service:vpn
+     network_mode: service:vpn
 
     environment:
       - PUID=1000
@@ -79,20 +79,20 @@ services:
       - torrent-downloads:/downloads
 
     ## Comment/Disable below ports if VPN is enabled
-    ports:
-      - 5080:5080
-      - 6881:6881
-      - 6881:6881/udp
+    #ports:
+    #  - 5080:5080
+    #  - 6881:6881
+    #  - 6881:6881/udp
     restart: "unless-stopped"
 
   radarr:
     container_name: radarr
     image: lscr.io/linuxserver/radarr:5.4.6
     networks:
-      - mynetwork   # Comment this line if VPN is enabled
+    #  - mynetwork   # Comment this line if VPN is enabled
     ## Uncomment below lines if VPN is enabled
-    #   mynetwork:
-    #     ipv4_address: ${RADARR_STATIC_CONTAINER_IP} # It should be available IPv4 address in range of docker network `mynetwork` e.g. 172.20.0.2
+       mynetwork:
+         ipv4_address: ${RADARR_STATIC_CONTAINER_IP} # It should be available IPv4 address in range of docker network `mynetwork` e.g. 172.20.0.2
     environment:
       - PUID=1000
       - PGID=1000
@@ -108,10 +108,10 @@ services:
     image: linuxserver/sonarr:4.0.4
     container_name: sonarr
     networks:
-      - mynetwork   # Comment this line if VPN is enabled
+    #  - mynetwork   # Comment this line if VPN is enabled
     ## Uncomment below lines if VPN is enabled
-    #   mynetwork:
-    #     ipv4_address: ${SONARR_STATIC_CONTAINER_IP} # It should be available IPv4 address in range of docker network `mynetwork` e.g. 172.20.0.2
+       mynetwork:
+         ipv4_address: ${SONARR_STATIC_CONTAINER_IP} # It should be available IPv4 address in range of docker network `mynetwork` e.g. 172.20.0.2
     environment:
       - PUID=1000
       - PGID=1000
@@ -127,13 +127,13 @@ services:
     container_name: prowlarr
     image: linuxserver/prowlarr:1.16.2
 
-    # Uncomment below if vpn is enabled
-    # depends_on:               # Uncomment this line if vpn is enabled
-    #   - vpn                   # Uncomment this line if vpn is enabled
-    # network_mode: service:vpn # Uncomment this line if vpn is enabled
+     Uncomment below if vpn is enabled
+     depends_on:               # Uncomment this line if vpn is enabled
+       - vpn                   # Uncomment this line if vpn is enabled
+     network_mode: service:vpn # Uncomment this line if vpn is enabled
 
-    networks:               # Comment this line if vpn is enabled
-      - mynetwork           # Comment this line if vpn is enabled
+    #networks:               # Comment this line if vpn is enabled
+    #  - mynetwork           # Comment this line if vpn is enabled
     environment:
       - PUID=1000
       - PGID=1000
@@ -142,8 +142,8 @@ services:
       - prowlarr-config:/config
 
     # Comment below ports if VPN is enabled.
-    ports:
-      - 9696:9696
+    #ports:
+    #  - 9696:9696
     restart: unless-stopped
 
   jellyseerr:
